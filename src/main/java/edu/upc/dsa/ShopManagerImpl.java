@@ -12,7 +12,6 @@ public class ShopManagerImpl implements ShopManager {
     private static ShopManager instance;
     Map<String,User> users;
     List<Obj> objects;
-
     final static Logger logger = Logger.getLogger(ShopManagerImpl.class);
 
     public static ShopManager getInstance() {
