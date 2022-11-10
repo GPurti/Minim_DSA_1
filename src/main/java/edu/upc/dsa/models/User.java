@@ -6,83 +6,78 @@ import java.util.*;
 
 
 public class User {
-    String name;
-    String surname;
-    String date;
-    Credentials credentials;
-    String id;
-    int saldo;
-    List<Obj> boughtobjects;
+
+    String idUser;
+    String idGame;
+    int level;
+    int points;
+    Map<String,List<Act>> gameActivities;
+    int status;
 
 
-    public User(){this.id = RandomUtils.getId();}
-    public User(String name, String surname, String date, Credentials credentials) {
+    public User(){}
+    public User(String idUser) {
         this();
-        this.name = name;
-        this.surname = surname;
-        this.date = date;
-        this.credentials=credentials;
-        this.saldo = 50;
-        this.boughtobjects = new ArrayList<>();
+        this.gameActivities = new HashMap<>();
+        this.status=0;
+        this.points=0;
     }
 
-    public void addObject(Obj object){
-        boughtobjects.add(object);
+    public String getIdGame() {
+        return idGame;
     }
 
-    public String getName() {
-        return name;
+    public void setIdGame(String idGame) {
+        this.idGame = idGame;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Map<String, List<Act>> getGameActivities() {
+        return gameActivities;
     }
 
-    public String getSurname() {
-        return surname;
+    public void setGameActivities(Map<String, List<Act>> gameActivities) {
+        this.gameActivities = gameActivities;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public int getStatus() {
+        return status;
     }
 
-    public String getDate() {
-        return date;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public String getIdUser() {
+        return idUser;
     }
 
-    public Credentials getCredentials() {
-        return credentials;
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
 
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
+    public int getLevel() {
+        return level;
     }
 
-    public String getId() {
-        return id;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public int getPoints() {
+        return points;
     }
 
-    public int getSaldo() {
-        return saldo;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
-    public void setSaldo(int saldo) {
-        this.saldo = saldo;
+
+    public void addGame(String idGame, Act a){
+        List<Act> l2 = new ArrayList<>();
+        l2.add(a);
+        gameActivities.put(idGame,l2);
     }
 
-    public List<Obj> getBoughtobjects() {
-        return boughtobjects;
-    }
 
-    public void setBoughtobjects(List<Obj> boughtobjects) {
-        this.boughtobjects = boughtobjects;
-    }
+
 }

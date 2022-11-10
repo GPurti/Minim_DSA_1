@@ -1,8 +1,5 @@
 package edu.upc.dsa.transferObject;
 
-import edu.upc.dsa.models.Credentials;
-import edu.upc.dsa.util.RandomUtils;
-
 public class UserIdInformation {
     String name;
     String surname;
