@@ -25,7 +25,7 @@ public class ShopManagerImpl implements ShopManager {
     }
     @Override
     public void addUser(String name, String surname, String date, Credentials credentials) throws UserAlreadyExistsException {
-        logger.info("new User ("+name+",  "+surname+", "+ date+", "+ credentials.getEmail()+", "+credentials.getPassword()+")");
+        logger.info("new User ( "+name+",  "+surname+", "+ date+", "+ credentials.getEmail()+", "+credentials.getPassword()+" )");
         for (User u : this.users.values()) {
             if (Objects.equals(credentials.getEmail(), u.getCredentials().getEmail())) {
                 logger.warn("This user already exists");
@@ -33,15 +33,14 @@ public class ShopManagerImpl implements ShopManager {
             }
         }
         User u = new User(name,surname,date,credentials);
-        logger.info("new User " + u);
         String id = u.getId();
         this.users.put(id,u);
         logger.info("new User added");
     }
 
-
     @Override
     public List<User> getAlphabeticUserList(){
+        logger.info("get userList");
         List<User> userss = new ArrayList<>(this.users.values());
 
         userss.sort((User u1, User u2)->{
@@ -56,6 +55,7 @@ public class ShopManagerImpl implements ShopManager {
 
     @Override
     public void userLogin(Credentials credentials) throws InvalidCredentialsException {
+        logger.info("User login( "+ credentials.getEmail()+", "+credentials.getPassword()+" )");
         if (!equalCredentials(credentials)) {
             logger.warn("Credentials " + credentials.getEmail() + " and "+credentials.getPassword()+  " not found");
             throw new InvalidCredentialsException();
@@ -72,9 +72,8 @@ public class ShopManagerImpl implements ShopManager {
 
     @Override
     public void addObject(String name, String description, int coins) {
-
+        logger.info("new Object ( "+name+",  "+description+", "+ coins+" )");
         Obj object = new Obj(name, description, coins);
-        logger.info("new Object " + object);
         this.objects.add(object);
         logger.info("new Object added");
     }
@@ -83,11 +82,13 @@ public class ShopManagerImpl implements ShopManager {
     public List<Obj> getObjectList() {
         logger.info("getObjectList()");
         objects.sort((Obj o1, Obj o2)->(o2.getCoins()- o1.getCoins()));
+        logger.info("Object list received");
         return objects;
     }
 
     @Override
     public List<Obj> buyObject(String name, String id) throws InvalidCredentialsException, NotEnoughMoneyException {
+        logger.info("buyObject( "+name+",  "+id+" )");
         User u = users.get(id);
         if (u==null) {
             logger.warn("Credentials not found");
@@ -101,8 +102,11 @@ public class ShopManagerImpl implements ShopManager {
         }
         else {
             users.get(id).addObject(o);
+            users.get(id).setSaldo(money-o.getCoins());
+            logger.info("Object list received");
             return users.get(id).getBoughtobjects();
         }
+
     }
     public Obj dameDinero(String name){
         for (Obj o:objects){

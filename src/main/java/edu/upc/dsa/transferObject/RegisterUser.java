@@ -1,20 +1,16 @@
 package edu.upc.dsa.transferObject;
 
 import edu.upc.dsa.models.Credentials;
-import edu.upc.dsa.models.Obj;
-import edu.upc.dsa.util.RandomUtils;
 
-import java.util.*;
-
-public class UserInformation {
+public class RegisterUser {
     String name;
     String surname;
     String date;
     Credentials credentials;
 
 
-    public UserInformation(){}
-    public UserInformation(String name, String surname, String date, Credentials credentials) {
+    public RegisterUser(){}
+    public RegisterUser(String name, String surname, String date, Credentials credentials) {
         this();
         this.name = name;
         this.surname = surname;

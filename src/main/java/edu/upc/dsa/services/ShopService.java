@@ -5,7 +5,8 @@ import edu.upc.dsa.models.Credentials;
 import edu.upc.dsa.models.Obj;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.transferObject.ObjectInformation;
-import edu.upc.dsa.transferObject.UserInformation;
+import edu.upc.dsa.transferObject.RegisterUser;
+import edu.upc.dsa.transferObject.UserIdInformation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -17,7 +18,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Api(value = "/shop", description = "Endpoint to Shop Service")
 @Path("/shop")
@@ -44,25 +44,23 @@ public class ShopService {
     @GET
     @ApiOperation(value = "get a UserList", notes = "UserList")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = UserInformation.class, responseContainer="List"),
+            @ApiResponse(code = 201, message = "Successful", response = UserIdInformation.class, responseContainer="List"),
     })
     @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAlphabeticUserList() {
             List<User> userlist = this.sm.getAlphabeticUserList();
-            GenericEntity<List<UserInformation>> entity = new GenericEntity<List<UserInformation>>(getAlphabeticUserInfoList(userlist)) {};
+            GenericEntity<List<UserIdInformation>> entity = new GenericEntity<List<UserIdInformation>>(getAlphabeticUserInfoList(userlist)) {};
             return Response.status(201).entity(entity).build();
     }
-    public List<UserInformation> getAlphabeticUserInfoList(List<User> userlist){
-        List<UserInformation> userinfolist = new ArrayList<>();
+    public List<UserIdInformation> getAlphabeticUserInfoList(List<User> userlist){
+        List<UserIdInformation> useridinfolist = new ArrayList<>();
         for(User u:userlist){
-            UserInformation userInformation = new UserInformation(u.getName(),u.getSurname(), u.getDate(),u.getCredentials());
-            userinfolist.add(userInformation);
+            UserIdInformation infoidUser = new UserIdInformation(u.getName(),u.getSurname(), u.getDate(), u.getId());
+            useridinfolist.add(infoidUser);
         }
-        return userinfolist;
+        return useridinfolist;
     }
-
-
 
     @GET
     @ApiOperation(value = "get a ObjectList", notes = "ObjectList")
@@ -83,16 +81,16 @@ public class ShopService {
     @POST
     @ApiOperation(value = "create a new User", notes = "Register user")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response= UserInformation.class),
-            @ApiResponse(code = 500, message = "Some parameter is null"),
+            @ApiResponse(code = 201, message = "Successful", response= RegisterUser.class),
+            @ApiResponse(code = 401, message = "Some parameter is null"),
             @ApiResponse(code = 409, message = "User already exists")
 
     })
 
     @Path("/user")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addUser(UserInformation user) {
-        if (user.getName()==null || user.getSurname()==null || user.getDate()==null || user.getCredentials()==null)  return Response.status(500).entity(user).build();
+    public Response addUser(RegisterUser user) {
+        if (user.getName()=="" || user.getSurname()=="" || user.getDate()=="" || user.getCredentials().getEmail()=="" || user.getCredentials().getPassword()=="")  return Response.status(401).entity(user).build();
         try{
             this.sm.addUser(user.getName(),user.getSurname(),user.getDate(),user.getCredentials());
             return Response.status(201).entity(user).build();
@@ -107,14 +105,14 @@ public class ShopService {
     @ApiOperation(value = "create a new Object", notes = "Object addition")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response= ObjectInformation.class),
-            @ApiResponse(code = 500, message = "Some parameter is null or not valid")
+            @ApiResponse(code = 401, message = "Some parameter is null or not valid")
 
     })
 
     @Path("/object")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addObject(ObjectInformation obj) {
-        if (obj.getName()==null || obj.getDescription()==null || obj.getCoins()<0)  return Response.status(500).entity(obj).build();
+        if (obj.getName()=="" || obj.getDescription()=="" || obj.getCoins()<0)  return Response.status(401).entity(obj).build();
         this.sm.addObject(obj.getName(), obj.getDescription(),obj.getCoins());
         return Response.status(201).entity(obj).build();
     }
@@ -151,11 +149,7 @@ public class ShopService {
 
     @Path("/user/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response userLogin(Credentials credentials) throws InvalidCredentialsException {
-        //if (credentials.getEmail()==null || credentials.getPassword()==null)  return Response.status(500).entity(credentials).build();
-        //this.sm.userLogin(credentials);
-        //return Response.status(201).entity(credentials).build();
-
+    public Response userLogin(Credentials credentials) {
         try{
             this.sm.userLogin(credentials);
             return Response.status(201).entity(credentials).build();
