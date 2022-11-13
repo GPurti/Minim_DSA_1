@@ -4,8 +4,10 @@ public class Game {
     String id;
     String description;
     int numlevels;
+    public Game() {}
 
     public Game(String id, String description, int numlevels) {
+        this();
         this.id = id;
         this.description = description;
         this.numlevels = numlevels;

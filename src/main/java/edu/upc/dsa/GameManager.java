@@ -1,26 +1,26 @@
 package edu.upc.dsa;
 
 import edu.upc.dsa.models.*;
+import edu.upc.dsa.transferObject.ActualLevelInfo;
 
 
 import java.util.*;
 
 public interface GameManager {
 
-    public void createGame(String id, String description, int numLevels);
-    public void startGame(String gameId, String userId) throws InvalidUserException, InvalidGameException, UserAlreadyGameException;
-    //public Pair<Integer, Game> getUserLevel(String id );
-    public Integer getPoints(String id) throws InvalidUserException, UserNotInGameException;
-    public void upgradeLevel(String id, int points, String date) throws InvalidUserException, UserNotInGameException;
-    public void endGame(String gameId);
-    public List<User> getUsersByPoints();
-    public List<String> getGames(String id);
+    public void createGame(String idGame, String description, int numLevels);
+    public void startGame(String idGame, String idUser) throws InvalidUserException, InvalidGameException, UserAlreadyGameException;
+    public ActualLevelInfo getUserLevel(String idUser ) throws UserNotInGameException, InvalidUserException;
+    public Integer getPoints(String idUser) throws InvalidUserException, UserNotInGameException;
+    public void upgradeLevel(String idUser, int points, String date) throws InvalidUserException, UserNotInGameException;
+    public void endGame(String idUser) throws UserNotInGameException, InvalidUserException;
+    public List<User> getUsersByPoints(String idGame) throws InvalidGameException;
+    public List<String> getGames(String idUser) throws InvalidUserException;
 
-    public List<Act> getActivities(String id, String userId);
+    public List<Act> getActivities(String idGame, String idUser);
 
 
     public void addUser(String id);
-    public int size();
 
     public int numUsers();
     public int numGames();

@@ -18,6 +18,7 @@ public class User {
     public User(){}
     public User(String idUser) {
         this();
+        this.idUser=idUser;
         this.gameActivities = new HashMap<>();
         this.status=0;
         this.points=0;
@@ -78,6 +79,24 @@ public class User {
         gameActivities.put(idGame,l2);
     }
 
+    public void modifyLevel( int points, String date, Game game){
+        setLevel(getLevel()+1);
+        if (getLevel()>=game.getNumlevels())
+        {
+            setPoints(getPoints()+100);
+            setStatus(0);
+        }
+        else {
+            setPoints(getPoints() + points);
+        }
+
+        List<Act> activities = gameActivities.get(getIdGame());
+        Act a = new Act(getLevel(), getPoints(),date);
+        activities.add(a);
+    }
+    public Integer getPointsOfGame(String idGame){
+        return gameActivities.get(idGame).get(gameActivities.get(idGame).size()-1).getPoints();
+    }
 
 
 }
