@@ -16,7 +16,7 @@ public class GameManagerImplTest {
     GameManager sm;
 
     @Before
-    public void setUp() throws UserAlreadyExistsException, UserAlreadyGameException, InvalidGameException, InvalidUserException {
+    public void setUp() throws UserAlreadyGameException, InvalidGameException, InvalidUserException {
         sm= new GameManagerImpl();
         sm.addUser("qwer");
         sm.addUser("zxcv");
@@ -97,9 +97,12 @@ public class GameManagerImplTest {
         Assert.assertEquals(l2,l);
     }
     @Test
-    public void testGetActivities() throws InvalidGameException {
+    public void testGetActivities() throws InvalidGameException, UserNotInGameException, InvalidUserException {
         List<Act> l = sm.getActivities("1111","zxcv");
+        sm.upgradeLevel("zxcv",80,"10/03/2010");
         Assert.assertEquals(l.get(l.size()-1).getLevel(),sm.getUsersByPoints("1111").get(0).getLevel());
+        Assert.assertEquals(130,l.get(l.size()-1).getPoints());
+        Assert.assertEquals("10/03/2010",l.get(l.size()-1).getDate());
 
     }
 }
